@@ -1,26 +1,63 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "react-chat-widget/lib/styles.css";
+import "./App.css"
+import CallMessage from './CallMessage'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import {
+  Widget,
+  addResponseMessage,
+  addLinkSnippet,
+  addUserMessage,
+  renderCustomComponent
+} from "react-chat-widget";
+
+import {
+  WithStyles,
+  createStyles,
+  Theme,
+  withStyles,
+} from "@material-ui/core/styles";
+
+const styles = ({ spacing, palette }: Theme) =>
+  createStyles({
+    title: {
+      flexGrow: 1,
+    },
+  });
+  
+const avatar = 'https://secure.gravatar.com/avatar/68b4ced53058ee78731b20ae62b86874?s=64';
+
+interface Props extends WithStyles<typeof styles> {}
+
+class App extends React.Component<Props> {
+  
+  private handleScreenShare() {}
+
+  private handleNewUserMessage = (newMessage: string) => {
+    console.log(`New message incoming! ${newMessage}`);
+  };
+
+  public componentDidMount() {
+    const props = { disabled: false, onClick: ()=>{props.disabled = true; this.forceUpdate()} };
+
+    renderCustomComponent(CallMessage, props, true);
+  }
+
+
+  public render() {
+    const { classes } = this.props;
+
+    return (
+      <div>
+        <Widget
+          title="talkdeskhelp"
+          subtitle=""
+          profileAvatar={avatar}
+          handleNewUserMessage={this.handleNewUserMessage}
+        />
+      </div>
+    );
+  }
 }
 
-export default App;
+export default withStyles(styles)(App);
