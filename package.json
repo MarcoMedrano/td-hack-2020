@@ -13,16 +13,17 @@
     "@types/node": "^12.0.0",
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
+    "strongly-typed-events": "^1.6.12",
+    "mark-ind-mrtc": "0.0.2",
     "mobx": "^5.15.4",
     "mobx-react": "^6.2.2",
     "react": "^16.13.1",
     "react-chat-widget": "^3.0.5",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.1",
+    "typescript": "~3.7.2",
     "reshake": "^1.2.1",
-    "strongly-typed-events": "^1.6.12",
-    "styled-components": "^5.1.1",
-    "typescript": "~3.7.2"
+    "styled-components": "^5.1.1"
   },
   "scripts": {
     "start": "react-scripts start",

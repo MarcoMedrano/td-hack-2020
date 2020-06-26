@@ -10,10 +10,9 @@ import AppStore from "./AppStore";
 
 @observer
 class SetupDialog extends React.Component {
-
-  private handleCloseDialog(){
+  private handleCloseDialog() {
     AppStore.setupDialogOpened = false;
-    (document.getElementById('iframe') as any).src = AppStore.pageUrl;
+    (document.getElementById("iframe") as any).src = AppStore.pageUrl;
   }
 
   public render() {
@@ -38,17 +37,6 @@ class SetupDialog extends React.Component {
           <TextField
             autoFocus
             margin="dense"
-            id="photo"
-            label="Your avatar url"
-            fullWidth
-            value={AppStore.avatarUrl}
-            onChange={(e) => {
-              AppStore.avatarUrl = e.target.value;
-            }}
-          />
-          <TextField
-            autoFocus
-            margin="dense"
             id="page"
             label="The customer page"
             fullWidth
@@ -57,13 +45,31 @@ class SetupDialog extends React.Component {
               AppStore.pageUrl = e.target.value;
             }}
           />
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            label="Agent Name"
+            value={AppStore.agentName}
+            onChange={(e) => {
+              AppStore.agentName = e.target.value;
+            }}
+          />
+          <TextField
+            autoFocus
+            margin="dense"
+            id="photo"
+            label="Agent avatar url"
+            fullWidth
+            value={AppStore.agentAvatarUrl}
+            onChange={(e) => {
+              AppStore.agentAvatarUrl = e.target.value;
+            }}
+          />
         </DialogContent>
         <DialogActions>
-          <Button
-            onClick={this.handleCloseDialog}
-            color="primary"
-          >
-            Go
+          <Button onClick={this.handleCloseDialog} color="primary">
+            CONNECT
           </Button>
         </DialogActions>
       </Dialog>

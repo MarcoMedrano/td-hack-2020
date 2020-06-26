@@ -2,21 +2,18 @@ import React from "react";
 
 import { createStyles, Theme } from "@material-ui/core/styles";
 
-import PhoneIcon from "@material-ui/icons/PhoneEnabled";
 import { Fab, makeStyles } from "@material-ui/core";
 import { ShakeLittle } from "reshake";
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     margin: {
       margin: theme.spacing(1),
-    },
-    extendedIcon: {
-      marginRight: theme.spacing(1),
+      padding: theme.spacing(2),
     },
   })
 );
 
-export default function CallMessage(props: any) {
+export default function ActionMessage(props: any) {
   const classes = useStyles();
 
   return (
@@ -28,9 +25,9 @@ export default function CallMessage(props: any) {
       disabled= {props.disabled}
       onClick={props.onClick}
     >
-      Answer incoming call?
-      <ShakeLittle fixed={true} active={!props.disabled}>
-        <PhoneIcon className={classes.extendedIcon} />
+      {props.message}
+      <ShakeLittle fixed={true} active={!props.disabled} style={{lineHeight: 'normal'}}>
+        {props.icon}
       </ShakeLittle>
     </Fab>
   );
