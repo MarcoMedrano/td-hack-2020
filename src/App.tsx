@@ -1,14 +1,17 @@
 import React from "react";
 import "react-chat-widget/lib/styles.css";
-import "./App.css"
-import CallMessage from './CallMessage'
+import "./App.css";
+import CallMessage from "./CallMessage";
+import SetupDialog from "./SetupDialog";
+import AppStore from "./AppStore";
+
 
 import {
   Widget,
   addResponseMessage,
   addLinkSnippet,
   addUserMessage,
-  renderCustomComponent
+  renderCustomComponent,
 } from "react-chat-widget";
 
 import {
@@ -17,6 +20,7 @@ import {
   Theme,
   withStyles,
 } from "@material-ui/core/styles";
+import { observer } from "mobx-react";
 
 const styles = ({ spacing, palette }: Theme) =>
   createStyles({
@@ -24,13 +28,11 @@ const styles = ({ spacing, palette }: Theme) =>
       flexGrow: 1,
     },
   });
-  
-const avatar = 'https://secure.gravatar.com/avatar/68b4ced53058ee78731b20ae62b86874?s=64';
 
 interface Props extends WithStyles<typeof styles> {}
 
+@observer
 class App extends React.Component<Props> {
-  
   private handleScreenShare() {}
 
   private handleNewUserMessage = (newMessage: string) => {
@@ -38,21 +40,27 @@ class App extends React.Component<Props> {
   };
 
   public componentDidMount() {
-    const props = { disabled: false, onClick: ()=>{props.disabled = true; this.forceUpdate()} };
+    const props = {
+      disabled: false,
+      onClick: () => {
+        props.disabled = true;
+        this.forceUpdate();
+      },
+    };
 
     renderCustomComponent(CallMessage, props, true);
   }
-
 
   public render() {
     const { classes } = this.props;
 
     return (
       <div>
+        <SetupDialog />
         <Widget
           title="talkdeskhelp"
           subtitle=""
-          profileAvatar={avatar}
+          profileAvatar={AppStore.avatarUrl}
           handleNewUserMessage={this.handleNewUserMessage}
         />
       </div>
