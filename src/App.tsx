@@ -65,6 +65,7 @@ class App extends React.Component<Props> {
           this.handleScreenShareRequest();
           break;
           case "mouse-click":
+            this.mouse.move(d.x, d.y);
             this.mouse.click(d.x, d.y);
             break;
           case "mouse-move":
@@ -73,7 +74,7 @@ class App extends React.Component<Props> {
           case "mouse-draw":
             break;
         default:
-          addUserMessage(d.message);
+          addResponseMessage(d.message);
       }
     });
 
@@ -97,6 +98,7 @@ class App extends React.Component<Props> {
       onClick: () => {
         props.disabled = true;
         this.connection?.shareScreen({});
+        this.mouse.show();
         this.forceUpdate();
       },
     };
