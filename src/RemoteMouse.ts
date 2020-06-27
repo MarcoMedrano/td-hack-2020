@@ -7,7 +7,10 @@ export default class RemoteMouse {
 
   public move(posX: number, posY: number) {
     $("#remoteMouse").animate(
-      { top: posY + "px", left: posX + "px" },
+      {
+        top: $(window).height() * posY + "px",
+        left: $(window).width() * posX + "px",
+      },
       {
         duration: 100,
         complete: function () {},
@@ -20,8 +23,8 @@ export default class RemoteMouse {
 
     var d = document.createElement("div");
     d.className = "clickEffect";
-    d.style.top = posY + "px";
-    d.style.left = posX + "px";
+    d.style.top = $(window).height() * posY + "px";
+    d.style.left = $(window).width() * posX + "px";
 
     document.body.appendChild(d);
 
