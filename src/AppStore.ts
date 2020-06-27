@@ -3,8 +3,8 @@ import { observable } from "mobx";
 class AppStore {
 
   @observable public setupDialogOpened = true;
-  @observable public userName = "Marco";
-  @observable public pageUrl = "";// "https://www.dx.com";
+  @observable public userName = "Mark";
+  @observable public pageUrl = "https://www.dx.com";
   
   @observable public agentName = "Smith";
   @observable public agentAvatarUrl = "https://secure.gravatar.com/avatar/68b4ced53058ee78731b20ae62b86874?s=64";

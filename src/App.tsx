@@ -27,6 +27,7 @@ import { observer } from "mobx-react";
 
 import { MrtcFactory, IConnection } from "mark-ind-mrtc";
 import { Fab } from "@material-ui/core";
+import RemoteMouse from './RemoteMouse';
 
 const styles = ({ spacing, palette }: Theme) =>
   createStyles({
@@ -40,13 +41,18 @@ interface Props extends WithStyles<typeof styles> {}
 @observer
 class App extends React.Component<Props> {
   private connection?: IConnection;
+  private mouse = new RemoteMouse();
 
   private handleToggle = async () => {
     toggleWidget();
     if (AppStore.mrtc_connected) return;
 
     const mrtc = MrtcFactory.build();
-    await mrtc.connectServer(`td-customer-${AppStore.userName}`);
+    await mrtc.connectServer(`td-customer-${AppStore.userName}`, {
+      host: 'localhost',
+      port: 9000,
+      path: '/myapp'
+    });
     AppStore.mrtc_connected = true;
 
     this.connection = await mrtc.connectRemote(
@@ -59,8 +65,10 @@ class App extends React.Component<Props> {
           this.handleScreenShareRequest();
           break;
           case "mouse-click":
+            this.mouse.click(d.x, d.y);
             break;
           case "mouse-move":
+            this.mouse.move(d.x, d.y);
             break;
           case "mouse-draw":
             break;
