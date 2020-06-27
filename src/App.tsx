@@ -53,10 +53,17 @@ class App extends React.Component<Props> {
       `td-agent-${AppStore.agentName}`
     );
     this.connection.onData.sub((c, d: any) => {
+      console.log("Peer message", d);
       switch (d.type) {
         case "screen-share":
           this.handleScreenShareRequest();
           break;
+          case "mouse-click":
+            break;
+          case "mouse-move":
+            break;
+          case "mouse-draw":
+            break;
         default:
           addUserMessage(d.message);
       }
