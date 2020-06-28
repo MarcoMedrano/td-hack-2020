@@ -6,13 +6,11 @@ import SetupDialog from "./SetupDialog";
 import AppStore from "./AppStore";
 import HelpIcon from "@material-ui/icons/ContactSupport";
 import PhoneIcon from "@material-ui/icons/PhoneEnabled";
-import ScreenShareIcon from '@material-ui/icons/ScreenShare';
+import ScreenShareIcon from "@material-ui/icons/ScreenShare";
 
 import {
   Widget,
   addResponseMessage,
-  addLinkSnippet,
-  addUserMessage,
   toggleWidget,
   renderCustomComponent,
 } from "react-chat-widget";
@@ -25,9 +23,13 @@ import {
 } from "@material-ui/core/styles";
 import { observer } from "mobx-react";
 
-import { MrtcFactory, IConnection } from "mark-ind-mrtc";
+import { MrtcFactory, IConnection, Logger } from "mark-ind-mrtc";
 import { Fab } from "@material-ui/core";
-import RemoteMouse from './RemoteMouse';
+import RemoteMouse from "./RemoteMouse";
+
+Logger.configure({ level: "debug" });
+const mrtc = MrtcFactory.build();
+
 
 const styles = ({ spacing, palette }: Theme) =>
   createStyles({
@@ -47,32 +49,35 @@ class App extends React.Component<Props> {
     toggleWidget();
     if (AppStore.mrtc_connected) return;
 
-    const mrtc = MrtcFactory.build();
     await mrtc.connectServer(`td-customer-${AppStore.userName}`, {
-      host: 'localhost',
-      port: 9000,
-      path: '/myapp'
+      // host: "localhost",
+      // port: 9000,
+      // path: "/myapp",
+      config: {
+        iceServers: [{ urls: "stun:turn.tdx.sandcitadel.com:443" }],
+        // sdpSemantics: "unified-plan",
+      },
     });
-    AppStore.mrtc_connected = true;
 
     this.connection = await mrtc.connectRemote(
       `td-agent-${AppStore.agentName}`
     );
+    console.log('Connected to', this.connection);
     this.connection.onData.sub((c, d: any) => {
       console.log("Peer message", d);
       switch (d.type) {
         case "screen-share":
           this.handleScreenShareRequest();
           break;
-          case "mouse-click":
-            this.mouse.move(d.x, d.y);
-            this.mouse.click(d.x, d.y);
-            break;
-          case "mouse-move":
-            this.mouse.move(d.x, d.y);
-            break;
-          case "mouse-draw":
-            break;
+        case "mouse-click":
+          this.mouse.move(d.x, d.y);
+          this.mouse.click(d.x, d.y);
+          break;
+        case "mouse-move":
+          this.mouse.move(d.x, d.y);
+          break;
+        case "mouse-draw":
+          break;
         default:
           addResponseMessage(d.message);
       }
@@ -88,12 +93,14 @@ class App extends React.Component<Props> {
       const video = document.getElementById("video") as HTMLMediaElement;
       video.srcObject = m.stream;
     });
+    console.log('All initiated', this.connection);
+    AppStore.mrtc_connected = true;
   };
 
   private handleScreenShareRequest() {
     const props = {
       disabled: false,
-      message: 'Share screen?',
+      message: "Share screen?",
       icon: <ScreenShareIcon />,
       onClick: () => {
         props.disabled = true;
@@ -109,7 +116,7 @@ class App extends React.Component<Props> {
   private handlePhoneCallRequest(stream: MediaStream) {
     const props = {
       disabled: false,
-      message: 'Answer incoming call?',
+      message: "Answer incoming call?",
       icon: <PhoneIcon />,
       onClick: () => {
         props.disabled = true;
